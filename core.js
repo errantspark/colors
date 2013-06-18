@@ -29,7 +29,7 @@ var newColors = [
   "#ab3046",
   "#10cc3c",
   "#e06324",
-  "#181840",
+  "#2B2BA2",
   "#a584bd",
   "#00B7EB",
   "#bAAA9f"
@@ -49,6 +49,7 @@ document.body.appendChild(frag);
 oldColors.forEach(function(d, i){
     var myDiv = document.createElement("div");
     myDiv.id = "color";
+    myDiv.textContent = i;
     myDiv.style.background = d;
     col1.appendChild(myDiv);
   }
