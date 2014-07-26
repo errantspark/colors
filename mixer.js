@@ -35,6 +35,7 @@ var swa = document.querySelectorAll(".swatch");
 swa = Array.prototype.slice.call(swa);
 var clos = 0;
 var pos = 0;
+var cie = [];
 Leap.loop(function(a){
   clos = a;
   var of = [75.3472, -78.2791, -100.713];
@@ -42,5 +43,6 @@ Leap.loop(function(a){
   pos = clos.pointables[0].tipPosition;
   win = [(pos[0] + of[0])/mu[0], (pos[1] + of[1])/mu[1], (pos[2] + of[2])/mu[2]]
   bg.style.background = "#"+toHEX(win);
-
+  cie = jankyColor(toHEX(win));
 });
+setInterval(function(){put({xy:cie})},1000);
