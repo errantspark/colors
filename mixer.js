@@ -36,13 +36,22 @@ swa = Array.prototype.slice.call(swa);
 var clos = 0;
 var pos = 0;
 var cie = [];
+var win = 0;
+var bright = 0;
 Leap.loop(function(a){
   clos = a;
   var of = [75.3472, -78.2791, -100.713];
   var mu = [197.35219999999995, 182.87890000000002, -226.148];
+  if (clos.pointables[0]) {
   pos = clos.pointables[0].tipPosition;
-  win = [(pos[0] + of[0])/mu[0], (pos[1] + of[1])/mu[1], (pos[2] + of[2])/mu[2]]
+  }
+  win = [(pos[0] + of[0])/mu[0], (pos[1] + of[1])/mu[1], (pos[2] + of[2])/mu[2]];
   bg.style.background = "#"+toHEX(win);
-  cie = jankyColor(toHEX(win));
-});
-setInterval(function(){put({xy:cie, transitiontime:1})},500);
+  //cie = jankyColor(toHEX(win));
+  var clip = function(n, lb, ub){
+    return Math.max(lb, Math.min(n, ub))
+  }
+  cie = [clip(win[0], 0,1),clip(win[1], 0, 1)];
+  bright = clip(Math.round(255*win[2]),0,255);
+})
+setInterval(function(){lights[0].put({xy:cie, transitiontime:1}); console.log(cie+" "+bright)},120);

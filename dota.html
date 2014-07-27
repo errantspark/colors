@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="hue.js"></script>
+
+</head>
+<body>
+  <button type="button" class="btn btn-lg btn-primary" id="runetimer">Rune Timer</button>
+  <button type="button" class="btn btn-lg btn-success" id="pulltimer">Pull Timer</button>
+</body>
+<script>
+  var test;
+  var twoblink = function(){
+    clearInterval(test);
+    test = setInterval(
+      function(){
+        setTimeout(
+          function(){group0.put({ct:300, transitiontime:7, on:true, bri:255})}, 900); 
+          group0.put({xy:jankyColor("ff0000"), transitiontime:7, on:true, bri:255})}, 120000)
+      
+      };
+  var oneblink = function(){
+    clearInterval(test);
+    test = setInterval(
+      function(){
+        setTimeout(
+          function(){group0.put({ct:300, transitiontime:7, on:true, bri:255})}, 900); 
+          group0.put({xy:[0.4,0.51], transitiontime:7, on:true, bri:255})}, 60000)
+      
+      };
+      $("#runetimer").on('click', twoblink);
+       $("#pulltimer").on('click', oneblink);
+</script>
