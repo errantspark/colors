@@ -45,4 +45,4 @@ Leap.loop(function(a){
   bg.style.background = "#"+toHEX(win);
   cie = jankyColor(toHEX(win));
 });
-setInterval(function(){put({xy:cie})},1000);
+setInterval(function(){put({xy:cie, transitiontime:1})},500);
