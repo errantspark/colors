@@ -54,4 +54,4 @@ Leap.loop(function(a){
   cie = [clip(win[0], 0,1),clip(win[2], 0, 1)];
   bright = clip(Math.round(255*win[1]),0,255);
 })
-setInterval(function(){lights[0].put({xy:cie, bri:bright, transitiontime:1}); console.log(cie+" "+bright)},120);
+setInterval(function(){group0.put({xy:cie, bri:bright, transitiontime:10}); console.log(cie+" "+bright)},1200);
