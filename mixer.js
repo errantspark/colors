@@ -51,7 +51,7 @@ Leap.loop(function(a){
   var clip = function(n, lb, ub){
     return Math.max(lb, Math.min(n, ub))
   }
-  cie = [clip(win[0], 0,1),clip(win[1], 0, 1)];
-  bright = clip(Math.round(255*win[2]),0,255);
+  cie = [clip(win[0], 0,1),clip(win[2], 0, 1)];
+  bright = clip(Math.round(255*win[1]),0,255);
 })
-setInterval(function(){lights[0].put({xy:cie, transitiontime:1}); console.log(cie+" "+bright)},120);
+setInterval(function(){lights[0].put({xy:cie, bri:bright, transitiontime:1}); console.log(cie+" "+bright)},120);

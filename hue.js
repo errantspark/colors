@@ -74,5 +74,78 @@ var jankyColor = function(color){
   //var hue = Math.atan2(Math.sqrt(3)*(g-b), 2*(r-g-b))
   //return Math.round((hue+Math.PI)*(65280/(Math.PI*2)));   
 } 
+
+var slope = function(p0,p1){
+  return (p1[1]-p0[1])/(p1[0] - p0[0])
+}
+
+var sqr = function(x) { return x * x }
+var distnc = function(v, w) { return Math.sqrt((sqr(w[0]-v[0]) + sqr(w[1] - v[1]))) }
+
+var perline = function(a, b, r){
+  return [((b[0]-a[0])*r)+a[0],((b[1]-a[1])*r)+a[1]]
+}
+
+var tricen = function(p0,p1,p2){
+  return [(p0[0]+p1[0]+p2[0])/3,(p0[1]+p1[1]+p2[1])/3]
+}
+
+var incenter = function(a,b,c){
+  var aBC = distnc(b,c);
+  //console.log("b="+b+" c="+c+" distbc="+aBC)
+  var bAC = distnc(a,c);
+  var cAB = distnc(a,b);
+  var peri = aBC + bAC + cAB;
+  //console.log("xx: ("+aBC+"*"+a[0]+") + ("+bAC+"*"+b[0]+") + ("+cAB+"*"+c[0]+") / "+peri);
+  var xx = (aBC*a[0] + bAC*b[0] + cAB*c[0]) / peri
+  var yy = (aBC*a[1] + bAC*b[1] + cAB*c[1]) / peri
+  return [xx, yy];
+}
+
+var retri = function(r,g,b,p0,p1,p2){
+  var ration = function(l, n){
+    if (l+n === 0) {
+      return 0.5;
+    } else {
+      return (n/(l+n));
+    }
+  }
+  var n0 = perline(p0, p1, ration(r,g));  
+  var n1 = perline(p0, p2, ration(r,b));  
+  var n2 = perline(p1, p2, ration(g,b));  
+  //console.log("barytri: "+n0+", "+n1+", "+n2)
+  return incenter(n0,n1,n2);
+}
+var jankyColor2 = function(color){
+  var r = parseInt(color.substr(0,2), 16)/255
+  var g = parseInt(color.substr(2,2), 16)/255
+  var b = parseInt(color.substr(4,2), 16)/255
+  console.log(r+":"+g+":"+b)
+  return retri(r,g,b,[0.675, 0.322],[0.4091, 0.518],[0.167, 0.04])
+}
+
+var fade = function(put, scale, time, steps){
+  var t = [];
+  for (var i = 0; i < steps; i++) {
+    var pos = (i/(steps-1))
+    console.log(pos);
+    var color = scale(pos).hex().substr(1);
+    console.log(color);
+    var xyc = jankyColor2(color);
+    t[i] = xyc;
+    if (i === 0) {
+      put({xy: t[0], transitime:0});
+    } else {
+    setTimeout(
+        function(n, tt){
+          console.log(tt);
+          put({xy: t[n], transitiontime:Math.round(tt/100)});
+        }, (time*(pos-(1/steps))), i , (time/steps))
+    }
+  }
+}
+var bez = chroma.interpolate.bezier(['red', 'yellow', 'blue', 'purple']);
+var testscale = chroma.scale(bez).correctLightness(true);
+
 //[0.4078,0.5144] green lights
 //ARCHITECTURE NOTES should have functions to put/set/get etc that take a function that generates the json and a function? or maybe just object that has easy paths to different things, like the different bulbs and such, have to read up more on the API
