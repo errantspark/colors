@@ -1,3 +1,7 @@
+//it's hard to be sad when the world around you is so complex and interconnected
+//and internally consistent and propagates forward through time in a way that 
+//can be modelled and predicted
+
 var k_co = {};
 
 (function(){

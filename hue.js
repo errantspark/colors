@@ -102,6 +102,8 @@ var incenter = function(a,b,c){
   return [xx, yy];
 }
 
+//i have to invert this function easy peasy, you get an incenter and a triangle and youfigure out, wait don't distances to the points/distances to edges work? no
+//
 var retri = function(r,g,b,p0,p1,p2){
   var ration = function(l, n){
     if (l+n === 0) {
@@ -123,7 +125,7 @@ var jankyColor2 = function(color){
   console.log(r+":"+g+":"+b)
   return retri(r,g,b,[0.675, 0.322],[0.4091, 0.518],[0.167, 0.04])
 }
-
+//make a function that takes some arguments and outputs a curried put from another thing and allows it to take more arguments
 var fade = function(put, scale, time, steps){
   var t = [];
   for (var i = 0; i < steps; i++) {
@@ -146,6 +148,6 @@ var fade = function(put, scale, time, steps){
 }
 var bez = chroma.interpolate.bezier(['red', 'yellow', 'blue', 'purple']);
 var testscale = chroma.scale(bez).correctLightness(true);
-
+//fade(lights[0].put, testscale, 10000, 5)
 //[0.4078,0.5144] green lights
 //ARCHITECTURE NOTES should have functions to put/set/get etc that take a function that generates the json and a function? or maybe just object that has easy paths to different things, like the different bulbs and such, have to read up more on the API
