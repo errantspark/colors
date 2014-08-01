@@ -86,6 +86,18 @@ var perline = function(a, b, r){
   return [((b[0]-a[0])*r)+a[0],((b[1]-a[1])*r)+a[1]]
 }
 
+
+//this intentionally also works with
+var antipline = function(a, b, p){
+  var l = distnc(a,p);
+  var n = distnc(b,p);
+  if (l+n === 0) {
+    return 0;
+  } else {
+    return (l/(l+n));
+  }
+}
+
 var tricen = function(p0,p1,p2){
   return [(p0[0]+p1[0]+p2[0])/3,(p0[1]+p1[1]+p2[1])/3]
 }
@@ -134,7 +146,7 @@ var jankyColor2 = function(color){
   var g = parseInt(color.substr(2,2), 16)/255
   var b = parseInt(color.substr(4,2), 16)/255
   //console.log(r+":"+g+":"+b)
-  return retri(r,g,b,[0.675, 0.322],[0.4091, 0.518],[0.167, 0.04])
+  return retri2(r,g,b,[0.675, 0.322],[0.4091, 0.518],[0.167, 0.04])
 }
 
 var retri2 = function(r,g,b,p0,p1,p2){
@@ -153,6 +165,85 @@ var retri2 = function(r,g,b,p0,p1,p2){
   //console.profileEnd()
   return n1;
 }
+
+//http://jsfiddle.net/justin_c_rounds/Gd2S2/light/
+var checkLineIntersection = function(line1StartX, line1StartY, line1EndX, line1EndY, line2StartX, line2StartY, line2EndX, line2EndY) {
+    // if the lines intersect, the result contains the x and y of the intersection (treating the lines as infinite) and booleans for whether line segment 1 or line segment 2 contain the point
+    var denominator, a, b, numerator1, numerator2, result = {
+        x: null,
+        y: null,
+        onLine1: false,
+        onLine2: false
+    };
+    denominator = ((line2EndY - line2StartY) * (line1EndX - line1StartX)) - ((line2EndX - line2StartX) * (line1EndY - line1StartY));
+    if (denominator == 0) {
+        return result;
+    }
+    a = line1StartY - line2StartY;
+    b = line1StartX - line2StartX;
+    numerator1 = ((line2EndX - line2StartX) * a) - ((line2EndY - line2StartY) * b);
+    numerator2 = ((line1EndX - line1StartX) * a) - ((line1EndY - line1StartY) * b);
+    a = numerator1 / denominator;
+    b = numerator2 / denominator;
+
+    // if we cast these lines infinitely in both directions, they intersect here:
+    result.x = line1StartX + (a * (line1EndX - line1StartX));
+    result.y = line1StartY + (a * (line1EndY - line1StartY));
+/*
+        // it is worth noting that this should be the same as:
+        x = line2StartX + (b * (line2EndX - line2StartX));
+        y = line2StartX + (b * (line2EndY - line2StartY));
+        */
+    // if line1 is a segment and line2 is infinite, they intersect if:
+    if (a > 0 && a < 1) {
+        result.onLine1 = true;
+    }
+    // if line2 is a segment and line1 is infinite, they intersect if:
+    if (b > 0 && b < 1) {
+        result.onLine2 = true;
+    }
+    // if line1 and line2 are segments, they intersect if both of the above are true
+    return result;
+};
+
+//wrapper function for the stolen line intersection thing to make it fit with 
+//my ideas of how shit should be until i get a chance to rewrite that shit
+var lineintersect = function(pa1,pa2,pb1,pb2){
+  var end = checkLineIntersection(pa1[0],pa1[1],pa2[0],pa2[1],pb1[0],pb1[1],pb2[0],pb2[1]);
+  if (!(end.online1)){
+    throw "problems is happnin";
+  }
+  return [end.x, end.y];
+};
+
+//i'm pretty sure this is horribly and could be reduced using math to be way
+//simpler
+var invertCIE = function(p,r,g,b){
+  var intri = k_co.intriangle(p,r,g,b);
+  var cliped = k_co.clipto(p,r,g,b);
+  p = cliped;
+  var end = {
+    r: 1,
+    g: 1,
+    b: 1
+  };
+  var sideOneIntersect = lineintersect(r,g,p,b);
+  var sideTwoIntersect = lineintersect(r,b,p,g);
+  var sideThreeIntersect = lineintersect(g,b,p,r);
+  var rg = antipline(r,g,sideOneIntersect);
+  var rb = antipline(r,b,sideTwoIntersect);
+  var gb = antipline(g,b,sideThreeIntersect);
+  (rg === 0) ? (end.g = 0) : null
+  (rb === 0) ? (end.b = 0) : null
+  (gb === 0) ? (end.r = 0) : null
+  var tg = 1*(1-rg);
+  var tb = 1*(1-rb);
+  //normalize the values
+  var rgb = [tr, 
+
+  return end;
+};
+
 //make a function that takes some arguments and outputs a curried put from another thing and allows it to take more arguments
 var fade = function(put, scale, time, steps){
   var t = [];
