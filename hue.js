@@ -105,6 +105,8 @@ var incenter = function(a,b,c){
 //i have to invert this function easy peasy, you get an incenter and a triangle and youfigure out, wait don't distances to the points/distances to edges work? no
 //
 var retri = function(r,g,b,p0,p1,p2){
+  //console.profile()
+  //console.time("retri")
   var ration = function(l, n){
     if (l+n === 0) {
       return 0.5;
@@ -116,23 +118,49 @@ var retri = function(r,g,b,p0,p1,p2){
   var n1 = perline(p0, p2, ration(r,b));  
   var n2 = perline(p1, p2, ration(g,b));  
   //console.log("barytri: "+n0+", "+n1+", "+n2)
-  return incenter(n0,n1,n2);
+  var end =  incenter(n0,n1,n2);
+  //console.timeEnd("retri");
+  //console.log("wtf");
+  //console.profileEnd();
+  return end;
 }
+
+var garbage = function(){
+  console.log("test")
+}
+
 var jankyColor2 = function(color){
   var r = parseInt(color.substr(0,2), 16)/255
   var g = parseInt(color.substr(2,2), 16)/255
   var b = parseInt(color.substr(4,2), 16)/255
-  console.log(r+":"+g+":"+b)
+  //console.log(r+":"+g+":"+b)
   return retri(r,g,b,[0.675, 0.322],[0.4091, 0.518],[0.167, 0.04])
+}
+
+var retri2 = function(r,g,b,p0,p1,p2){
+  //console.profile()
+  //console.time("retri")
+  var ration = function(l, n){
+   if (l+n === 0) {
+      return 0.5;
+    } else {
+      return (n/(l+n));
+    }
+  }
+  var n0 = perline(p0, p1, ration(r,g));  
+  var n1 = perline(n0, p2, ration((r+g),b));  
+  //console.timeEnd("retri");
+  //console.profileEnd()
+  return n1;
 }
 //make a function that takes some arguments and outputs a curried put from another thing and allows it to take more arguments
 var fade = function(put, scale, time, steps){
   var t = [];
   for (var i = 0; i < steps; i++) {
     var pos = (i/(steps-1))
-    console.log(pos);
+    //console.log(pos);
     var color = scale(pos).hex().substr(1);
-    console.log(color);
+    //console.log(color);
     var xyc = jankyColor2(color);
     t[i] = xyc;
     if (i === 0) {
@@ -140,7 +168,7 @@ var fade = function(put, scale, time, steps){
     } else {
     setTimeout(
         function(n, tt){
-          console.log(tt);
+          //console.log(tt);
           put({xy: t[n], transitiontime:Math.round(tt/100)});
         }, (time*(pos-(1/steps))), i , (time/steps))
     }
