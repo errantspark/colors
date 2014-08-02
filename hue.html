@@ -1,17 +1,63 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
+  <title>THROW PHOTONS</title>
   <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <link href="//fonts.googleapis.com/css?family=Roboto:100italic,100,300italic,300,400italic,400,500italic,500,700italic,700,900italic,900" rel="stylesheet" type="text/css">  
+  <style>
+    body {
+      background: url(bg.png);
+      font-family: 'Roboto', sans-serif;
+      color: #edc;
+    }
+    #mainw {
+      background: #1a0e1c;
+      height: 100vh;
+    }
+    .btn {
+      letter-spacing: 1px;
+      background: none; 
+      border-radius: 0px;
+    }
+    #mainheading {
+      line-height: 60px;
+      margin-bottom:10px;
+      font-size: 96px;
+      font-weight: 900;
+      border: 0px;
+    }
+    [contenteditable]:focus{
+      outline:0px solid transparent;
+    }
+    .form-control:focus{
+      border-color: #cccccc;
+      border: none;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }   
+    input[type="text"], textarea {
+      outline: none;
+      box-shadow:none !important;
+      border:1px solid #ccc !important;
+    }    
+  </style>
 </head>
 <body>
+  <div class="container" id="mainw">
+    <h1 id="mainheading">THROW PHOTONS</span></h1>
+  <p>Currently throwing  <span id="numpho" contenteditable="true">255</span> photons</P>
   <button type="button" class="btn btn-lg btn-primary" id="one">matt</button>
   <button type="button" class="btn btn-lg btn-primary" id="three">andrew</button>
   <button type="button" class="btn btn-lg btn-primary" id="two">main</button>
   <button type="button" class="btn btn-lg btn-success" id="all">all</button>
-  <canvas id="canvas" width="603" height="660" style="position:relative; width:603px; height:660px; background:url(cie1931.jpg);"></canvas>
+  <button type="button" class="btn btn-lg btn-danger" id="on">on</button>
+  <button type="button" class="btn btn-lg btn-default" id="off">off</button>
   <input id="brightSlider" type="range" min="1" max="255" value="255" style="width:400px"/>
+  <br>
+  <canvas id="canvas" width="603" height="660" style="position:relative; width:603px; height:660px; background:url(cie1931.jpg);"></canvas>
+</div>
 </body>
 <script src="chroma.min.js"></script>
 <script src="color.js"></script>

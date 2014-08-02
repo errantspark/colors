@@ -10,8 +10,8 @@ function drawGamut(gamut){
     return transCoord(a, zero, ptfive);
   }
   var gamut = gamut.map(cur);
-  context.strokeStyle = 'white';
-  context.lineWidth = 1;
+  context.strokeStyle = '#1a0e1c';
+  context.lineWidth = 0.9;
   context.beginPath();
   context.moveTo(gamut[0][0], gamut[0][1]);
   context.lineTo(gamut[1][0], gamut[1][1]);
@@ -28,7 +28,7 @@ function drawPoint(a) {
     context.arc(x, y, 3, 0, 2 * Math.PI, true);
     context.lineWidth = 3;
     context.stroke();
-    context.strokeStyle = 'white';
+    context.strokeStyle = '#edc';
     context.lineWidth = 1;
     context.beginPath();
     context.arc(x, y, 5, 0, 2 * Math.PI, true);
@@ -46,8 +46,8 @@ function transCoord2(pt, r1, r2){
   var back = [ptr[0]/oneone[0], (-ptr[1])/oneone[1]];
   return back;
 }
-var lastclick = []
-function mouseMove(e)
+var lastclick = transCoord(lights[0].get().state.xy, zero, ptfive)
+function mouseClick(e)
 {
     var mouseX, mouseY;
     if(e.offsetX) {
@@ -62,10 +62,40 @@ function mouseMove(e)
     drawGamut(hueGamut);
     drawPoint([mouseX, mouseY]);
     lastclick = [mouseX, mouseY]; 
-    select({xy:transCoord2([mouseX, mouseY], zero, ptfive), bri:parseInt(document.getElementById('brightSlider').value)});
+    //select({xy:transCoord2([mouseX, mouseY], zero, ptfive), bri:parseInt(document.getElementById('brightSlider').value)});
 }
-$("#one").on('click',  function(){select = lights[0].put});
-$("#two").on('click',  function(){select = lights[1].put});
-$("#three").on('click',  function(){select = lights[2].put});
-$("#all").on('click', function(){select = group0.put});
-document.getElementById('canvas').onclick = mouseMove;
+var syncslide = function(){
+  $('#brightSlider').val($("#numpho").html());
+}
+var syncslide2 = function(){
+  $("#numpho").html($('#brightSlider').val())
+};
+document.getElementById('numpho').addEventListener("input", syncslide);
+document.getElementById('brightSlider').addEventListener("input", syncslide2);
+$("#one").on('click',  function(){spd = 100;select = lights[0].put});
+$("#two").on('click',  function(){spd = 100; select = lights[1].put});
+$("#three").on('click',  function(){spd = 100; select = lights[2].put});
+$("#all").on('click', function(){spd = 1000;select = group0.put});
+$("#on").on('click', function(){select({on:true})});
+$("#off").on('click', function(){select({on:false})});
+document.getElementById('canvas').onmousedown = function(e){
+  mouseClick(e);
+  document.getElementById('canvas').onmousemove = mouseClick;
+};
+document.getElementById('canvas').onmouseup = function(){
+  document.getElementById('canvas').onmousemove = undefined;
+};
+$(window).blur(function(){
+  clearInterval(test);
+});
+$(window).focus(function(){
+  test = setInterval(sendcomm, spd)
+});
+var spd = 1000;
+var sendcomm = function(){
+  select({xy:transCoord2(lastclick, zero, ptfive), bri:parseInt(document.getElementById('brightSlider').value), transitiontime:(spd/100)})
+  clearInterval(test);
+  test = setInterval(sendcomm, spd)
+}
+test = setInterval(sendcomm, spd)
+//clearInterval(test);
