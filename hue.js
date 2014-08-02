@@ -3,14 +3,9 @@ var developerid = 'newdeveloper';
 var basestation = "http://10.0.0.55/";
 var group0uri = basestation+"api/"+developerid+"/groups/0";
 var defcon = {on:true, ct:280, sat:255, bri:255};
-   // For the hue bulb the corners of the triangle are:
-    // -Red: 0.675, 0.322
-    // -Green: 0.4091, 0.518
-    // -Blue: 0.167, 0.04
+
+//gamut of various things in the CIE 1931 color space
 var hueGamut = [[0.675,0.322],[0.409,0.518],[0.167,0.04]]
-//these are deri
-//[0.157, 0.654, 0.316]
-//[0.063, 0.329, 0.598]
 var delGamut = [[0.675,0.329],[0.316,0.598],[0.157.0.063]]
 
 var Group = function(resource){
@@ -62,7 +57,7 @@ var initiate = function(n){
 };
   
 initiate(window);
-//var group0 = new Group(group0uri);
+
 group0.put({alert:'select'});
 
 var jankyColor = function(color){
@@ -258,5 +253,4 @@ var fade = function(put, scale, time, steps){
 var bez = chroma.interpolate.bezier(['red', 'yellow', 'blue', 'purple']);
 var testscale = chroma.scale(bez).correctLightness(true);
 //fade(lights[0].put, testscale, 10000, 5)
-//[0.4078,0.5144] green lights
 //ARCHITECTURE NOTES should have functions to put/set/get etc that take a function that generates the json and a function? or maybe just object that has easy paths to different things, like the different bulbs and such, have to read up more on the API
