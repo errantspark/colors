@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
+  <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+  <button type="button" class="btn btn-lg btn-primary" id="one">matt</button>
+  <button type="button" class="btn btn-lg btn-primary" id="three">andrew</button>
+  <button type="button" class="btn btn-lg btn-primary" id="two">main</button>
+  <button type="button" class="btn btn-lg btn-success" id="all">all</button>
+  <canvas id="canvas" width="603" height="660" style="position:relative; width:603px; height:660px; background:url(cie1931.jpg);"></canvas>
+  <input id="brightSlider" type="range" min="1" max="255" value="255" style="width:400px"/>
 </body>
 <script src="chroma.min.js"></script>
 <script src="color.js"></script>
 <script src="hue.js"></script>
+<script src="hueweb.js"></script>

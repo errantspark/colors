@@ -46,12 +46,11 @@ Leap.loop(function(a){
   pos = clos.pointables[0].tipPosition;
   }
   win = [(pos[0] + of[0])/mu[0], (pos[1] + of[1])/mu[1], (pos[2] + of[2])/mu[2]];
-  bg.style.background = "#"+toHEX(win);
-  //cie = jankyColor(toHEX(win));
   var clip = function(n, lb, ub){
     return Math.max(lb, Math.min(n, ub))
   }
   cie = [clip(win[0], 0,1),clip(win[2], 0, 1)];
   bright = clip(Math.round(255*win[1]),0,255);
+  bg.style.background = "#"+CIEToHex(cie,delGamut);
 })
 setInterval(function(){lights[0].put({xy:cie, bri:bright, transitiontime:10}); console.log(cie+" "+bright)},120);
