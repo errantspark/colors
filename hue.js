@@ -7,6 +7,11 @@ var defcon = {on:true, ct:280, sat:255, bri:255};
     // -Red: 0.675, 0.322
     // -Green: 0.4091, 0.518
     // -Blue: 0.167, 0.04
+var hueGamut = [[0.675,0.322],[0.409,0.518],[0.167,0.04]]
+//these are deri
+//[0.157, 0.654, 0.316]
+//[0.063, 0.329, 0.598]
+var delGamut = [[0.675,0.329],[0.316,0.598],[0.157.0.063]]
 
 var Group = function(resource){
   this.resource = resource;
@@ -61,9 +66,9 @@ initiate(window);
 group0.put({alert:'select'});
 
 var jankyColor = function(color){
-  var r = parseInt(color.substr(0,2), 16)/255
-  var g = parseInt(color.substr(2,2), 16)/255
-  var b = parseInt(color.substr(4,2), 16)/255
+  var r = parseInt(color.substr(0,2), 16)/255;
+  var g = parseInt(color.substr(2,2), 16)/255;
+  var b = parseInt(color.substr(4,2), 16)/255;
   var bright = Math.round((r + g + b)/3);
   var X = 0.4124*r + 0.3576*g + 0.1805*b;
   var Y = 0.2126*r + 0.7152*g + 0.0722*b;
@@ -218,28 +223,13 @@ var lineintersect = function(pa1,pa2,pb1,pb2){
 
 //i'm pretty sure this is horribly and could be reduced using math to be way
 //simpler
-var invertCIE = function(p,r,g,b){
-  var intri = k_co.intriangle(p,r,g,b);
-  var cliped = k_co.clipto(p,r,g,b);
-  p = cliped;
-  var end = {
-    r: 1,
-    g: 1,
-    b: 1
-  };
-  var sideOneIntersect = lineintersect(r,g,p,b);
-  var sideTwoIntersect = lineintersect(r,b,p,g);
-  var sideThreeIntersect = lineintersect(g,b,p,r);
-  var rg = antipline(r,g,sideOneIntersect);
-  var rb = antipline(r,b,sideTwoIntersect);
-  var gb = antipline(g,b,sideThreeIntersect);
-  (rg === 0) ? (end.g = 0) : null
-  (rb === 0) ? (end.b = 0) : null
-  (gb === 0) ? (end.r = 0) : null
-  var tg = 1*(1-rg);
-  var tb = 1*(1-rb);
-  //normalize the values
-  var rgb = [tr, 
+var barycentric = function(p,r,g,b){
+  var end = {};
+ 
+  end.r = ((g[1]-b[1])*(p[0]-b[0])+(b[0]-g[0])*(p[1]-b[1]))/((g[1]-b[1])*(r[0]-b[0])+(b[0]-g[0])*(r[1]-b[1]))
+  end.g = ((b[1]-r[1])*(p[0]-b[0])+(r[0]-b[0])*(p[1]-b[1]))/((g[1]-b[1])*(r[0]-b[0])+(b[0]-g[0])*(r[1]-b[1]))
+  end.b = 1-end.r-end.g;
+
 
   return end;
 };
