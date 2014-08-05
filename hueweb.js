@@ -5,6 +5,12 @@ var ptfive = [376,280]
 var select = lights[0].put;
 
 context = document.getElementById('canvas').getContext('2d');
+var imageObj = new Image();
+//imageObj.onload = function() {
+//  context.drawImage(imageObj, 0, 0);
+//};
+imageObj.src = 'cie1931.jpg';
+
 function drawGamut(gamut){
   var cur = function(a){
     return transCoord(a, zero, ptfive);
@@ -59,9 +65,12 @@ function mouseClick(e)
         mouseY = e.layerY;
     }
     context.clearRect(0,0,603,660);
+    context.drawImage(imageObj, 0, 0)
     drawGamut(hueGamut);
     drawPoint([mouseX, mouseY]);
     lastclick = [mouseX, mouseY]; 
+var c = context.getImageData(lastclick[0], lastclick[1], 1, 1).data    
+  $("#mainheading").css("color", "#"+k_co.toHEX.apply(null, c))
     //select({xy:transCoord2([mouseX, mouseY], zero, ptfive), bri:parseInt(document.getElementById('brightSlider').value)});
 }
 var syncslide = function(){
@@ -72,7 +81,7 @@ var syncslide2 = function(){
 };
 document.getElementById('numpho').addEventListener("input", syncslide);
 document.getElementById('brightSlider').addEventListener("input", syncslide2);
-$("#one").on('click',  function(){spd = 100;select = lights[0].put});
+$("#one").on('click',  function(){spd = 100;var lastclick = transCoord(lights[0].get().state.xy, zero, ptfive);select = lights[0].put});
 $("#two").on('click',  function(){spd = 100; select = lights[1].put});
 $("#three").on('click',  function(){spd = 100; select = lights[2].put});
 $("#all").on('click', function(){spd = 1000;select = group0.put});
